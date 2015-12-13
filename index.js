@@ -6,7 +6,7 @@ window.twttr.ready(function (twttr) {
      */
 
     var now = new Date(),
-        appId = "hotic23lr8n",
+        appId = "{Your-App-Id}",
         dsName = 'clicked',
         strToday = (now.getFullYear().toString() + "-" + (("0" + (now.getMonth() + 1)).slice(-2)).toString() + "-" + (("0" + now.getDate()).slice(-2)).toString()),
         /**
