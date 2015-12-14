@@ -16,11 +16,26 @@ window.twttr.ready(function (twttr) {
             var mk = new window.MilkCocoa(appId + '.mlkcca.com'),
                 ds = mk.dataStore(dsName),
                 dsSite = ds.child(window.location.href);
+
             dsSite.get(id, function (err, datum) {
-                var clicked = Number(datum.value.clicked);
+                var clicked;
+
+                if (!err) {
+                    clicked = Number(datum.value.clicked) + 1;
+                } else {
+                    // エラー時
+                    if (err === "not found") {
+                        clicked = Number(1);
+                    } else {
+                        // そのほかのエラーは何もしない
+                        window.console.log(err);
+                        mk.disconnect();
+                        return;
+                    }
+                }
 
                 dsSite.set(id, {
-                    "clicked": clicked + 1
+                    "clicked": clicked.toString()
                 }, function (err, pushed) {
                     mk.disconnect();
                 });
@@ -39,36 +54,15 @@ window.twttr.ready(function (twttr) {
 
             if (!err) {
                 div.textContent = datum.value.clicked.toString();
-                mk.disconnect();
-                return;
-            }
-
-            /*
-             * ページアクセス時にデータストアを確実に作成しておく
-             */
-            if (err === "not found") {
-                // データがまだないとき
-
-                // 総クリック数を取得・設定する
-                dsSite.set("total", {
-                    "clicked": "0"
-                }, function (err, pushed) {
-                    div.textContent = "0";
-
-                    // 今日のクリック数を取得・作成する
-                    dsSite.get(strToday, function (err, datum) {
-                        dsSite.set(strToday, {
-                            "clicked": "0"
-                        }, function (err, pushed) {
-                            mk.disconnect();
-                        });
-                    });
-                });
             } else {
-                // 他のエラー
-                mk.disconnect();
-                div.textContent = "!";
+                //エラー時
+                if (err === "not found") {
+                    div.textContent = "0";
+                } else {
+                    window.console.log(err);
+                }
             }
+            mk.disconnect();
         });
     }());
 
