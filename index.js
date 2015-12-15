@@ -48,16 +48,17 @@ window.twttr.ready(function (twttr) {
             dsSite = ds.child(window.location.href);
 
         dsSite.get("total", function (err, datum) {
-            var div = document.createElement('div'),
+            var span = document.createElement('span'),
                 btn = document.getElementById('btn');
-            btn.parentNode.appendChild(div);
+            span.className = "arrow_box";
+            btn.parentNode.appendChild(span);
 
             if (!err) {
-                div.textContent = datum.value.clicked.toString();
+                span.textContent = datum.value.clicked.toString();
             } else {
                 //エラー時
                 if (err === "not found") {
-                    div.textContent = "0";
+                    span.textContent = "0";
                 } else {
                     window.console.log(err);
                 }
