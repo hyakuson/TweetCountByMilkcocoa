@@ -53,15 +53,20 @@ window.twttr.ready(function (twttr) {
             span.className = "arrow_box";
             btn.parentNode.appendChild(span);
 
+            // 正常に取得できたとき
             if (!err) {
                 span.textContent = datum.value.clicked.toString();
+                mk.disconnect();
+                return;
+            }
+
+            //エラー時
+            if (err === "not found") {
+                // total未作成時
+                span.textContent = "0";
             } else {
-                //エラー時
-                if (err === "not found") {
-                    span.textContent = "0";
-                } else {
-                    window.console.log(err);
-                }
+                window.console.log(err);
+                span.textContent = "";
             }
             mk.disconnect();
         });
